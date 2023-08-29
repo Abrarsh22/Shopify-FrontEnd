@@ -1,0 +1,12 @@
+:where(.css-dev-only-do-not-override-12jzuas).ant-rate {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #fadb14 !important;
+    font-size: 30px !important;
+    line-height: unset !important;
+    list-style: none !important;
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
+    display: inline-block !important;
+    outline: none !important;
+}

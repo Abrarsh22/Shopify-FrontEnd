@@ -1,0 +1,307 @@
+<script>
+
+  async function triggerCreateSnippet(shopname) {
+    try {
+      if (!shopname.includes('.myshopify.com')) {
+      shopname = `${shopname}.myshopify.com`;
+    }
+      const parsedUrl = new URL(shopname);
+      const subdomain = parsedUrl.hostname;
+      console.log(subdomain);
+      const response = await fetch(`https://shopify-formapp-apis-dev.dtengg.com/api/forms/createSnippet?shopname=${subdomain}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        console.log('Snippet creation/update triggered successfully.');
+      } else {
+        console.error('Failed to trigger snippet creation/update.');
+      }
+    } catch (error) {
+      console.error('Error triggering snippet creation/update:', error);
+    }
+  }
+  async function createWebhook(shopname) {
+    try {
+      if (!shopname.includes('.myshopify.com')) {
+      shopname = `${shopname}.myshopify.com`;
+    }
+      const parsedUrl = new URL(shopname);
+      const subdomain = parsedUrl.hostname;
+      console.log(subdomain)
+      const response = await fetch(`https://shopify-formapp-apis-dev.dtengg.com/api/forms/createWebhook?shopname=${subdomain}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        console.log('Webhook creation/update triggered successfully.');
+      } else {
+        console.error('Failed to trigger Webhook creation/update.');
+      }
+    } catch (error) {
+      console.error('Error triggering Webhook creation/update:', error);
+    }
+  }
+
+  const snippetElements = document.querySelectorAll(".grid-item-btn");
+
+  snippetElements.forEach((snippetElement) => {
+    const soldOutButton = snippetElement.querySelector(".grid-item-soldout");
+
+    if (soldOutButton) {
+      const formElement = snippetElement.querySelector(".collectionForms");
+      const productId = formElement.dataset.productId;
+      const gridProductElement = snippetElement.closest(".grid-product");
+      console.log(gridProductElement)
+      const productHandle = gridProductElement.dataset.productHandle;
+      console.log(productHandle)
+      const variantId = soldOutButton.previousElementSibling.value; // Get the variant ID from the hidden input field
+      const productName = "Your Product Name";
+
+// Replace this with your method of obtaining the product name
+
+// Clear the content of the snippet element
+      snippetElement.innerHTML = "";
+
+// Create the "Notify Me" button
+      const notifyMeButton = document.createElement("button");
+      notifyMeButton.innerText = "Notify Me";
+ notifyMeButton.style.backgroundColor = "#f44336";
+      notifyMeButton.style.color = "red";
+      notifyMeButton.style.padding = "10px 20px";
+      notifyMeButton.style.border = "none";
+      notifyMeButton.style.borderRadius = "4px";
+      notifyMeButton.style.cursor = "pointer";
+      notifyMeButton.style.width = "100%";
+      notifyMeButton.setAttribute("data-product-id", productId);
+      notifyMeButton.setAttribute("data-variant-id", variantId);
+      notifyMeButton.setAttribute("data-product-title", productHandle);
+      snippetElement.appendChild(notifyMeButton);
+
+// Add a click event listener to the "Notify Me" button
+      notifyMeButton.addEventListener("click", function() {
+        const clickedProductId = this.getAttribute("data-product-id");
+
+        const clickedVariantId = this.getAttribute("data-variant-id");
+
+        const rfb_producttitle = this.getAttribute('data-product-title');
+        console.log("72", rfb_producttitle)
+        let rfb_product_titles = document.querySelectorAll('.rfb_product_title');
+        if (rfb_product_titles) 
+          rfb_product_titles.forEach(rfb_product_title => {
+            rfb_product_title.innerHTML = rfb_producttitle;
+          });
+
+        modal.style.display = "flex";
+        localStorage.setItem("RFB_PID", clickedProductId);
+        localStorage.setItem("RFB_PAvailable", false)
+      });
+    }
+
+// Add a click event listener to the snippet element itself
+    snippetElement.addEventListener("click", function() {
+      console.log(`Product is out of stock.`);
+      document.querySelector('.notify-modal').style.display = 'block';
+    });
+  });
+
+  const pageURL = window.location.origin + window.location.pathname;
+  const pageTitle = document.title;
+  localStorage.setItem("RFB_PVendor", "");
+  localStorage.setItem("RFB_PType", "");
+  localStorage.setItem("RFB_PPrice", "");
+  localStorage.setItem("RFB_PAvailable", "");
+  localStorage.setItem("RFB_PTags", "");
+  localStorage.setItem("RFB_PCollections", "");
+  localStorage.setItem("RFB_PID", "");
+  localStorage.setItem("RFB_PTitle", "");
+  localStorage.setItem("RFB_PageUrl", pageURL);
+  localStorage.setItem("RFB_PageTitle", pageTitle);
+  localStorage.setItem("RFB_PageId", "");
+  localStorage.setItem("RFB_PageHandle", "");
+  localStorage.setItem("RFB_OrderName", "");
+  localStorage.setItem("RFB_OrderEmail", "");
+  localStorage.setItem("RFB_OrderCustomer", "");
+  localStorage.setItem("RFB_ShopUrl", "");
+  localStorage.setItem("RFB_ShopCurrency", "");
+  localStorage.setItem("RFB_CollectionTitle", "");
+  localStorage.setItem("RFB_CollectionProducts", "");
+  localStorage.setItem("RFB_CollectionTags", "");
+  localStorage.setItem("RFB_CollectionUrl", "");
+  localStorage.setItem("RFB_CollectionAllProductCount", "");
+  localStorage.setItem("RFB_CAcceptsMarketing", "");
+  localStorage.setItem("RFB_CHasAccount", "");
+  localStorage.setItem("RFB_COrders", "");
+  localStorage.setItem("RFB_COrdersCount", "");
+  localStorage.setItem("RFB_CTotalSpent", "");
+  localStorage.setItem("RFB_CID", "");
+  localStorage.setItem("RFB_CFullName", "");
+  localStorage.setItem("RFB_CFirstName", "");
+  localStorage.setItem("RFB_CLastName", "");
+  localStorage.setItem("RFB_CEmail", "");
+  localStorage.setItem("RFB_CPhone", "");
+</script>
+
+{% if product %}
+  {% assign products_collection = product.collections %}
+  {% assign tags = product.tags | join: ',' %}
+  <script>
+    console.log("PRODUCT NAME","{{ product }}");
+    var productAvailable = "{{ product.available }}";
+    console.log("PRODUCT AVAILABLE", productAvailable);
+
+// Find all the out of stock product elements
+    const snippets = document.querySelectorAll('.payment-buttons [disabled]');
+
+// Loop through each out of stock product element
+    snippets.forEach((snippet) => {
+      const outOfStockButton = document.createElement("button");
+      outOfStockButton.classList.add('outstockbtn');
+      outOfStockButton.innerText = "Notify Me";
+      outOfStockButton.style.backgroundColor = "#f44336";
+      outOfStockButton.style.color = "#fff";
+      outOfStockButton.style.padding = "10px 20px";
+      outOfStockButton.style.border = "none";
+      outOfStockButton.style.borderRadius = "4px";
+      outOfStockButton.style.cursor = "pointer";
+      outOfStockButton.style.width = "100%";
+
+// Replace the out of stock button with the "Notify Me" button
+      snippet.replaceWith(outOfStockButton);
+
+      outOfStockButton.addEventListener('click', async function(event) {
+        event.preventDefault()
+        console.log("OUTOFSTOCKss");
+        const rfb_producttitle = localStorage.getItem("RFB_PTitle")
+        let rfb_product_titles = document.querySelectorAll('.rfb_product_title');
+        if (rfb_product_titles) 
+          rfb_product_titles.forEach(rfb_product_title => {
+            rfb_product_title.innerHTML = rfb_producttitle;
+          });
+        document.querySelector('.notify-modal').style.display = 'block';
+      });
+
+// Find the closest .sticky-cart-btn element (parent) from the current outOfStockButton
+      const cartBtnElement = snippet.closest('.sticky-cart-btn');
+
+// If the .sticky-cart-btn element is found, append the "Notify Me" button to it
+      if (cartBtnElement) {
+        cartBtnElement.parentElement.insertBefore(outOfStockButton, cartBtnElement.nextSibling);
+      }
+    });
+
+
+
+    var productCollection = [];{% for collection in products_collection %}var collectionData = {
+        id: "{{ collection.id }}",
+        title: "{{ collection.title }}",
+        handle: "{{ collection.handle }}"
+      };
+      productCollection.push(collectionData);{% endfor %}localStorage.setItem("RFB_PCollections", JSON.stringify(productCollection));
+    localStorage.setItem("RFB_PageHandle", "{{ product.handle }}");
+    localStorage.setItem("RFB_PVendor", "{{ product.vendor }}");
+    localStorage.setItem("RFB_PType", "{{ product.type }}");
+    var product_price = "{{ product.price | money_with_currency }}";
+    localStorage.setItem("RFB_PPrice", product_price);
+    localStorage.setItem("RFB_PAvailable", "{{ product.available }}");
+    localStorage.setItem("RFB_PTags", "{{ tags }}");
+    localStorage.setItem("RFB_PID", "{{ product.id }}");
+    localStorage.setItem("RFB_PTitle", "{{ product.title }}");
+  </script>
+{% endif %}
+
+{% if page %}
+  <script>
+    localStorage.setItem("RFB_PageUrl", "{{ page.url }}");
+    localStorage.setItem("RFB_PageTitle", "{{ page.title }}");
+    localStorage.setItem("RFB_PageId", "{{ page.id }}");
+    localStorage.setItem("RFB_PageHandle", "{{ page.handle }}");
+  </script>
+{% endif %}
+
+{% if order %}
+  {% assign customerObj = order.customer %}
+  <script>
+    var customerData = {
+      id: "{{ customerObj.id }}",
+      name: "{{ customerObj.name }}",
+      email: "{{ customerObj.email }}"
+    };
+    localStorage.setItem("RFB_OrderName", "{{ order.name }}");
+    localStorage.setItem("RFB_OrderEmail", "{{ order.email }}");
+    localStorage.setItem("RFB_OrderCustomer", JSON.stringify(customerData));
+  </script>
+{% endif %}
+
+{% if shop %}
+  <script>
+    localStorage.setItem("RFB_ShopUrl", "{{ shop.url }}");
+    localStorage.setItem("RFB_ShopCurrency", "{{ shop.currency }}");
+
+    let shopname = localStorage.getItem("RFB_ShopUrl")
+    triggerCreateSnippet(shopname);
+    createWebhook(shopname);
+  </script>
+{% endif %}
+
+{% if collection %}
+  {% assign products = collection.products %}
+  {% assign tags = collection.tags | join: ',' %}
+  <script>
+    var collectionProducts = [];{% for product in products %}var productData = {
+        id: "{{ product.id }}",
+        title: "{{ product.title }}"
+      };
+      collectionProducts.push(productData);{% endfor %}localStorage.setItem("RFB_CollectionProducts", JSON.stringify(collectionProducts));
+    localStorage.setItem("RFB_PageHandle", "{{ collection.handle }}");
+    localStorage.setItem("RFB_CollectionTitle", "{{ collection.title }}");
+    localStorage.setItem("RFB_CollectionTags", "{{ tags }}");
+    localStorage.setItem("RFB_CollectionUrl", "{{ collection.url }}");
+    localStorage.setItem("RFB_CollectionAllProductCount", "{{ collection.all_products_count }}");
+  </script>
+{% endif %}
+
+
+
+{% if customer %}
+  {% assign customer_orders = customer.orders %}
+  {% assign ordersCount = customer.orders_count %}
+  {% assign totalSpent = customer.total_spent | money_with_currency %}
+  <script>
+    var ordersData = [];{% for order in customer_orders %}var orderData = {
+        id: "{{ order.id }}",
+        name: "{{ order.name }}",
+        createdAt: "{{ order.created_at }}",
+        fulfillment_status: "{{ order.fulfillment_status }}",
+        item_count: "{{ order.item_count }}",
+        total_price: "{{ order.total_price | money_with_currency }}"
+      };
+      ordersData.push(orderData);{% endfor %}localStorage.setItem("RFB_COrders", JSON.stringify(ordersData));
+    localStorage.setItem("RFB_CAcceptsMarketing", "{{ customer.accepts_marketing }}");
+    localStorage.setItem("RFB_CHasAccount", "{{ customer.has_account }}");
+    localStorage.setItem("RFB_COrdersCount", "{{ ordersCount }}");
+    localStorage.setItem("RFB_CTotalSpent", "{{ totalSpent }}");
+    localStorage.setItem("RFB_CID", "{{ customer.id }}");
+    localStorage.setItem("RFB_CFullName", "{{ customer.name }}");
+    localStorage.setItem("RFB_CFirstName", "{{ customer.first_name }}");
+    localStorage.setItem("RFB_CLastName", "{{ customer.last_name }}");
+    localStorage.setItem("RFB_CEmail", "{{ customer.email }}");
+    localStorage.setItem("RFB_CPhone", "{{ customer.phone }}");
+  </script>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Formbuilder extension",
+    "target": "body",
+    "settings": [],
+    "stylesheet": "bundle.css",
+    "javascript": "bundle.js"
+  }
+{% endschema %}

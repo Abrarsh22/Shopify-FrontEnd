@@ -1,0 +1,53 @@
+.hidden-container {
+  padding: 10px 20px;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.hidden-inputs {
+  width: 100%;
+  margin: 5px 0px 20px;
+  padding: 8px 4px;
+  border: 1px solid darkgray;
+  border-radius: 3px;
+}
+
+.filtered_hidden_label,
+.selected_hidden_label {
+  cursor: pointer;
+  list-style: none;
+  border-radius: 2px;
+  margin: 2px;
+  padding: 2px;
+  width: fit-content;
+}
+
+.selected_hidden_label_div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.selected_hidden_label {
+  background-color: rgb(132, 231, 162);
+}
+
+.filtered_hidden_label:hover {
+  background-color: rgb(144, 207, 236);
+}
+
+.selected_hidden_label:hover {
+  background-color: rgb(247, 44, 44);
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-gap: 5px;
+}
+
+.all_hidden_label {
+  background-color: #e4dddd;
+  cursor: pointer;
+  padding: 8px;
+  word-break: break-all;
+}

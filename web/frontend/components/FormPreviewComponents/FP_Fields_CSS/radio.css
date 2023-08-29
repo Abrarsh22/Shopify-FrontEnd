@@ -1,0 +1,26 @@
+.radio-previewer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+  
+  .radio-previewer label {
+    font-weight: bold;
+  }
+  
+  .radio-previewer input  {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .radio-previewer span {
+    color: #353535;
+    font-size: 13px;
+  }
+  .radio-preview-input label {
+      font-weight: unset;
+      display: flex;
+      gap: 8px;
+  }
+  
